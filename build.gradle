@@ -26,8 +26,9 @@ ext {
 			spotless          : '6.23.3',
 
 		// Основные зависимости
-		postgresql        : '42.6.0',
+		postgresql        : '42.7.1',
 		lombok           : '1.18.30',
+		liquibase        : '4.25.0',
 
 		// Hibernate
 		hibernate        : '6.4.4.Final',
@@ -45,9 +46,10 @@ ext {
 			logback          : '1.4.11',
 
 			// Тестирование
-			junit            : '5.10.0',
-			assertj          : '3.24.2',
+			junit            : '5.10.1',
+			assertj          : '3.25.1',
 			h2               : '2.2.224',  // Добавлено для тестов
+			testcontainers   : '1.19.3',
 
 			// Инструменты
 			googleJavaFormat : '1.17.0'
@@ -56,9 +58,12 @@ ext {
 
 dependencies {
 	// Основные зависимости
-	implementation 'org.postgresql:postgresql:42.6.0'
+	implementation 'org.postgresql:postgresql:42.7.1'
 	implementation 'org.slf4j:slf4j-api:2.0.9'
-	implementation 'ch.qos.logback:logback-classic:1.4.11'
+	implementation 'ch.qos.logback:logback-classic:1.4.14'
+
+	// Liquibase
+	implementation "org.liquibase:liquibase-core:${versions.liquibase}"
 
 	// Hibernate
 	implementation "org.hibernate.orm:hibernate-core:${versions.hibernate}"
@@ -91,14 +96,14 @@ dependencies {
 	implementation 'io.dropwizard.metrics:metrics-core:4.2.22'
 
 	// Тестирование
-	testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	testImplementation 'org.assertj:assertj-core:3.24.2'
+	testImplementation 'org.assertj:assertj-core:3.25.1'
 
 	// TestContainers
-	testImplementation "org.testcontainers:testcontainers:1.20.4"
-	testImplementation "org.testcontainers:junit-jupiter:1.20.4"
-	testImplementation "org.testcontainers:postgresql:1.20.4"
+	testImplementation "org.testcontainers:testcontainers:${versions.testcontainers}"
+	testImplementation "org.testcontainers:junit-jupiter:${versions.testcontainers}"
+	testImplementation "org.testcontainers:postgresql:${versions.testcontainers}"
 
 	// H2 (для H2-тестов)
 	testImplementation 'com.h2database:h2:2.2.224'
@@ -116,7 +121,7 @@ dependencies {
 // Обязательная секция для TestContainers
 dependencyManagement {
 	imports {
-		mavenBom "org.testcontainers:testcontainers-bom:1.19.1"
+		mavenBom "org.testcontainers:testcontainers-bom:${versions.testcontainers}"
 	}
 }
 
