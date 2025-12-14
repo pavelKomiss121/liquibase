@@ -1,28 +1,28 @@
 version: '3.8'
 
 services:
-  postgres:
+  postgres-primary:
     image: postgres:15-alpine
-
     environment:
-      POSTGRES_DB: mentee_power_db
-      POSTGRES_USER: mentee
-      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: migration_test
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_pass
+    command: >
+      postgres
+      -c shared_preload_libraries=pg_stat_statements
+      -c pg_stat_statements.track=all
+      -c lock_timeout=5s
+      -c statement_timeout=300s
+    volumes:
+      - ./monitoring/pg_monitor.sql:/docker-entrypoint-initdb.d/monitor.sql
     ports:
       - "5432:5432"
-    volumes:
-      - ./postgres-data:/var/lib/postgresql/data
 
   pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: mentee-pgadmin
+    image: dpage/pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@mentee-power.ru
-      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_DEFAULT_EMAIL: admin@test.com
+      PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - "8080:80"
-    depends_on:
-      - postgres
-    volumes:
-      - ./pgadmin-data:/var/lib/pgadmin
 
